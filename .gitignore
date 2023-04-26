@@ -9,7 +9,6 @@
 /[Bb]uilds/
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
-/[Aa]ssets/
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
@@ -85,9 +84,16 @@ Temp/
 *.sln
 #Unity gitignore end
 
-# not ignored
-!/[Aa]ssets/Scenes/
-!/[Aa]ssets/SteamVR/
-!/[Aa]ssets/SteamVR_Input/
-!/[Aa]ssets/SteamVR_Resources/
-!/[Aa]ssets/VR*/
+# assets to ignore
+/[Aa]ssets/Erbeilo3D/
+/[Aa]ssets/ExampleAssets/
+/[Aa]ssets/Import/
+/[Aa]ssets/PBR Ground Materials #1 [Dirt& Grass]/
+/[Aa]ssets/PBR_Brick_Material_Free/
+/[Aa]ssets/Rock Package/
+/[Aa]ssets/Sketchfab For Unity/
+/[Aa]ssets/StreamingAssets/
+/[Aa]ssets/Whaleride/
+/[Aa]ssets/XR/
+/[Aa]ssets/*.meta
+
