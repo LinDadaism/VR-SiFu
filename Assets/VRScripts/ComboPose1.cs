@@ -27,7 +27,7 @@ public class ComboPose1 : SiFu_PoseAnime
         }
     }
 
-    protected override void Update()
+    void Update()
     {
         // Move character
         float bodyRatio = CalcLerpRatio(speedRH);

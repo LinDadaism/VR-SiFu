@@ -104,6 +104,7 @@ MonoBehaviour:
   startMarker: {x: 8, y: 1.2, z: 0}
   endMarker: {x: 3.4, y: 1.2, z: 0}
   speed: 1
+  animations: []
 --- !u!1 &5155477007921005188
 GameObject:
   m_ObjectHideFlags: 0
@@ -297,7 +298,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 926e4512ddf96e44cbf7e3735bf0e2f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grandParentPose: {fileID: 0}
+  visualCue: {fileID: 0}
+  isMovingPose: 0
+  percentMatch: 0.8
 --- !u!1 &5155477008416770531
 GameObject:
   m_ObjectHideFlags: 0
@@ -745,7 +748,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 926e4512ddf96e44cbf7e3735bf0e2f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grandParentPose: {fileID: 0}
+  visualCue: {fileID: 0}
+  isMovingPose: 0
+  percentMatch: 0.8
 --- !u!1 &5155477009458914470
 GameObject:
   m_ObjectHideFlags: 0
@@ -820,7 +825,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5155477009462118734}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.22, y: -5.466666, z: -0.000012715656}
+  m_LocalPosition: {x: -4, y: -5.466666, z: -0.000012715656}
   m_LocalScale: {x: 2.3333328, y: 2.333333, z: 2.3333328}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -902,7 +907,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 926e4512ddf96e44cbf7e3735bf0e2f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grandParentPose: {fileID: 0}
+  visualCue: {fileID: 0}
+  isMovingPose: 0
+  percentMatch: 0.8
 --- !u!1 &5155477009618941650
 GameObject:
   m_ObjectHideFlags: 0
@@ -1013,4 +1020,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 926e4512ddf96e44cbf7e3735bf0e2f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grandParentPose: {fileID: 0}
+  visualCue: {fileID: 0}
+  isMovingPose: 0
+  percentMatch: 0.8

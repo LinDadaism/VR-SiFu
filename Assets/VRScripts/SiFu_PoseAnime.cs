@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SiFu_PoseAnime : MonoBehaviour
@@ -16,6 +17,9 @@ public class SiFu_PoseAnime : MonoBehaviour
     // Total distance between the markers.
     protected float journeyLength;
 
+    // body parts animation
+    public List<Animator> animations = new List<Animator>();
+
     protected float CalcLerpRatio(float speed)
     {
         // Distance moved equals elapsed time times speed..
@@ -26,7 +30,7 @@ public class SiFu_PoseAnime : MonoBehaviour
         return fractionOfJourney;
     }
 
-    virtual protected void Start()
+    void Start()
     {
         // Keep a note of the time the movement started.
         startTime = Time.time;
@@ -36,11 +40,25 @@ public class SiFu_PoseAnime : MonoBehaviour
     }
 
     // Move to the target end position.
-    virtual protected void Update()
+    void Update()
     {
 
         float fractionOfJourney = CalcLerpRatio(speed);
         // Set our position as a fraction of the distance between the markers.
         transform.position = Vector3.Lerp(startMarker, endMarker, fractionOfJourney);
+
+        //PauseAnim();
+    }
+
+    // stop animation after reaching arena
+    void PauseAnim()
+    {
+        if (transform.position == endMarker)
+        {
+            foreach (Animator anim in animations)
+            {
+                anim.enabled = false;
+            }
+        }
     }
 }

@@ -63,10 +63,11 @@ public class SiFu_PoseManager : MonoBehaviour
             {
                 Debug.Log("No Grab");
             }
-            return;
+            //return; // for debugging
         }
-        //timer += Time.deltaTime;
+
         // spawn poses
+        //timer += Time.deltaTime;
         if (currPose == null /*timer > spawnPeriod*/)
         {
             //timer = 0;
@@ -97,7 +98,6 @@ public class SiFu_PoseManager : MonoBehaviour
         if (currPose != null)
         {
             ClearPose();
-            //Debug.Log("1-currPose: " + (currPose == null).ToString());
         }
         
     }
@@ -116,8 +116,11 @@ public class SiFu_PoseManager : MonoBehaviour
     void ClearPose()
     {
         bool fullBodyMatch = true;
+        //int id = 0;
         foreach (bool v in componentMatchArr)
         {
+            //Debug.Log("i: " + id + " = " + v);
+            //id++;
             fullBodyMatch = fullBodyMatch && v;
         }
 
