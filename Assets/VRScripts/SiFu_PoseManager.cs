@@ -7,7 +7,8 @@ public class SiFu_PoseManager : MonoBehaviour
     public float timer;
     public float spawnPeriod; // how frequently a pose is spawned e.g. every 5 seconds
     public int numberSpawnedEachPeriod;
-    public GameObject[] posesToSpawn = new GameObject[5];
+    public List<GameObject> posesToSpawn = new List<GameObject>();
+    private int idx = 0;
     public Camera VRCamera;
 
     [SerializeField]
@@ -44,6 +45,7 @@ public class SiFu_PoseManager : MonoBehaviour
         if (VRCamera != null)
         {
             originInScreenCoords = VRCamera.WorldToScreenPoint(new Vector3(0, 0, 0));
+            //Debug.Log("vr cam:" + originInScreenCoords);
         }
     }
 
@@ -61,7 +63,7 @@ public class SiFu_PoseManager : MonoBehaviour
             }
             else
             {
-                Debug.Log("No Grab");
+                //Debug.Log("No Grab");
             }
             //return; // for debugging
         }
@@ -73,18 +75,18 @@ public class SiFu_PoseManager : MonoBehaviour
             //timer = 0;
             for (int i = 0; i < numberSpawnedEachPeriod; i++)
             {
-                int idx = Random.Range(0, 5);
-                //Debug.Log("pose idx: " + idx);
-                currPose = Instantiate(posesToSpawn[idx],
+                //int idx = Random.Range(0, posesToSpawn.Count);
+                currPose = Instantiate(posesToSpawn[idx++ % posesToSpawn.Count],
                     //VRCamera.ScreenToWorldPoint(
                     //    new Vector3(originInScreenCoords.x + spawnDistX, 
                     //                originInScreenCoords.y + spawnDistY, 
                     //                originInScreenCoords.z)),
                     new Vector3(spawnDistX, spawnDistY, 0f),
                     Quaternion.AngleAxis(90.0f, Vector3.up));
+                
                 //Debug.Log("0-currPose: " + (currPose == null).ToString());
                 SiFu_Pose poseComp = currPose.GetComponent<SiFu_Pose>();
-                if(poseComp != null)
+                if (poseComp != null)
                 {
                     poseComp.SetScale(1f);
                 }
@@ -94,18 +96,13 @@ public class SiFu_PoseManager : MonoBehaviour
                 }
             }
         }
-
-        if (currPose != null)
-        {
-            ClearPose();
-        }
-        
     }
 
     public void setComponentMatch(string name, bool isMatch)
     {
 
         componentMatchArr[BodyComponents[name]] = isMatch;
+        ClearPose();
     }
 
     public void setCurrPose(string poseName)
@@ -115,6 +112,8 @@ public class SiFu_PoseManager : MonoBehaviour
 
     void ClearPose()
     {
+        if (currPose == null) return;
+
         bool fullBodyMatch = true;
         //int id = 0;
         foreach (bool v in componentMatchArr)

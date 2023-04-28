@@ -10,14 +10,23 @@ public class SiFu_SingleTracking : MonoBehaviour
     private Material    mat;
     SiFu_PoseManager    pm;
 
-    public  bool        isMovingPose;
+    private bool        isMovingPose;
     public  float       percentMatch = 0.8f; // posing time period required to count as a match
     private float       startTime; // for detecting a constant collision over x amound of seconds
 
     // Start is called before the first frame update
     void Start()
     {
-        grandParentPose = transform.parent.parent;
+        isMovingPose = transform.parent.gameObject.GetComponent<Animator>() ? true : false;
+        if (!isMovingPose)
+        {
+            grandParentPose = transform.parent.parent;
+        }
+        else
+        {
+            grandParentPose = transform.parent.parent.parent;
+
+        }
         if (visualCue == null)
         {
             visualCue = grandParentPose.GetChild(0).Find(gameObject.name);
@@ -62,11 +71,12 @@ public class SiFu_SingleTracking : MonoBehaviour
             {
                 float clipLength = anim.GetCurrentAnimatorClipInfo(0)[0].clip.length;
                 float animSpeed = anim.GetFloat("speed");
-                clipLength = clipLength / animSpeed * percentMatch; 
+                clipLength = clipLength / animSpeed * percentMatch;
 
                 if (timeElapsed > clipLength)
                 {
-                    Debug.Log("moving pose hit!");
+                    Debug.Log("clip length: " + clipLength);
+                    Debug.Log("component: " + gameObject.name);
                     // send signal to global manager
                     pm.setComponentMatch(gameObject.name, true);
                 }

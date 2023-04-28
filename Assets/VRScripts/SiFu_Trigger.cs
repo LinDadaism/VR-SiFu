@@ -18,7 +18,7 @@ namespace Valve.VR.InteractionSystem
 
         public bool CheckGrabStarting()
         {
-            Debug.Log("grabState = " + grabGripAction.GetState(handType).ToString());
+            //Debug.Log("grabState = " + grabGripAction.GetState(handType).ToString());
 
             if (grabPinchAction == null)
             {
