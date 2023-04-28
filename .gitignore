@@ -88,7 +88,6 @@ Temp/
 /[Aa]ssets/Erbeilo3D/
 /[Aa]ssets/ExampleAssets/
 /[Aa]ssets/Import/
-/[Aa]ssets/PBR Ground Materials #1 [Dirt& Grass]/
 /[Aa]ssets/PBR_Brick_Material_Free/
 /[Aa]ssets/Rock Package/
 /[Aa]ssets/Sketchfab For Unity/
@@ -96,4 +95,4 @@ Temp/
 /[Aa]ssets/Whaleride/
 /[Aa]ssets/XR/
 /[Aa]ssets/*.meta
-
+/[Aa]ssets/"PBR Ground Materials #1 [Dirt& Grass]"/
