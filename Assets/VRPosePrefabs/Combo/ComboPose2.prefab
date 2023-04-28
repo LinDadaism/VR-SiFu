@@ -489,7 +489,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   visualCue: {fileID: 6068956358649415857}
-  isMovingPose: 1
   percentMatch: 0.8
 --- !u!1 &6068956358649415858
 GameObject:
@@ -902,7 +901,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   visualCue: {fileID: 0}
-  isMovingPose: 0
   percentMatch: 0.8
 --- !u!1 &6068956359228742453
 GameObject:
@@ -1015,7 +1013,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   visualCue: {fileID: 0}
-  isMovingPose: 0
   percentMatch: 0.8
 --- !u!1 &6068956359517524973
 GameObject:
@@ -1046,7 +1043,7 @@ Transform:
   m_GameObject: {fileID: 6068956359517524973}
   m_LocalRotation: {x: -0.00000013429951, y: -0.0000000011718037, z: -0.1593112, w: 0.9872284}
   m_LocalPosition: {x: -0.4599997, y: -3.2699997, z: 1.3499819}
-  m_LocalScale: {x: 2.4999993, y: 2.4999998, z: 2.4999993}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 4798805080952047813}
@@ -1128,7 +1125,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   visualCue: {fileID: 6068956357597966178}
-  isMovingPose: 1
   percentMatch: 0.8
 --- !u!1 &6194355089580214675
 GameObject:

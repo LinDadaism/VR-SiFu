@@ -52,7 +52,7 @@ public class SiFu_PoseManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!gameRunning) {
+        if (gameRunning) {
             if (trigger.CheckGrabStarting())
             {
                 Debug.Log("Grab!!!!!!!!!!!!!!!!!!");
@@ -70,17 +70,13 @@ public class SiFu_PoseManager : MonoBehaviour
 
         // spawn poses
         //timer += Time.deltaTime;
-        if (currPose == null /*timer > spawnPeriod*/)
+        if (currPose == null && gameRunning /*timer > spawnPeriod*/)
         {
             //timer = 0;
             for (int i = 0; i < numberSpawnedEachPeriod; i++)
             {
                 //int idx = Random.Range(0, posesToSpawn.Count);
-                currPose = Instantiate(posesToSpawn[idx++ % posesToSpawn.Count],
-                    //VRCamera.ScreenToWorldPoint(
-                    //    new Vector3(originInScreenCoords.x + spawnDistX, 
-                    //                originInScreenCoords.y + spawnDistY, 
-                    //                originInScreenCoords.z)),
+                currPose = Instantiate(posesToSpawn[idx++ % posesToSpawn.Count], // currently looping thru the pose list
                     new Vector3(spawnDistX, spawnDistY, 0f),
                     Quaternion.AngleAxis(90.0f, Vector3.up));
                 
