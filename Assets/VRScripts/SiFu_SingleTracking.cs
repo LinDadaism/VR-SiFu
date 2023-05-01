@@ -11,7 +11,7 @@ public class SiFu_SingleTracking : MonoBehaviour
     SiFu_PoseManager    pm;
 
     private bool        isMovingPose;
-    public  float       percentMatch = 0.3f; // posing time period required to count as a match
+    private float       percentMatch = 0.3f; // posing time period required to count as a match
     private float       startTime; // for detecting a constant collision over x amound of seconds
 
     private bool        hasWeapon;
@@ -102,7 +102,7 @@ public class SiFu_SingleTracking : MonoBehaviour
             {
                 float clipLength = anim.GetCurrentAnimatorClipInfo(0)[0].clip.length;
                 float animSpeed = anim.GetFloat("speed");
-                clipLength = clipLength / animSpeed * percentMatch; // the time period a player needs to stay matching
+                clipLength = (clipLength / animSpeed) * percentMatch; // the time period a player needs to stay matching
 
                 if (timeElapsed > clipLength)
                 {
@@ -111,6 +111,7 @@ public class SiFu_SingleTracking : MonoBehaviour
                     // send signal to global manager
                     pm.setComponentMatch(gameObject.name, true);
                 }
+
             }
         }
 

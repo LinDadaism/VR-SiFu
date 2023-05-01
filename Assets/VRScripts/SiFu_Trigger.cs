@@ -24,7 +24,7 @@ namespace Valve.VR.InteractionSystem
             {
                 Debug.Log("NULL ACTION!");
             }
-            return grabGripAction.GetStateDown(handType) || grabPinchAction.GetStateDown(handType);
+            return grabPinchAction.GetStateDown(handType); // || grabPinchAction.GetStateDown(handType)
         }
 
         public GrabTypes GetGrabStarting(GrabTypes explicitType = GrabTypes.None)

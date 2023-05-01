@@ -111,11 +111,11 @@ public class SiFu_PoseManager : MonoBehaviour
         if (currPose == null) return;
 
         bool fullBodyMatch = true;
-        //int id = 0;
+        int id = 0;
         foreach (bool v in componentMatchArr)
         {
-            //Debug.Log("i: " + id + " = " + v);
-            //id++;
+            Debug.Log("i: " + id + " = " + v);
+            id++;
             fullBodyMatch = fullBodyMatch && v;
         }
 
