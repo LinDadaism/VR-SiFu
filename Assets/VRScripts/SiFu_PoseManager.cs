@@ -15,7 +15,7 @@ public class SiFu_PoseManager : MonoBehaviour
     GameObject currPose;
     Vector3 originInScreenCoords;
     float spawnDistX = 8.0f;
-    float spawnDistY = 1.2f;
+    float spawnDistY = 1.35f;
 
     bool[] componentMatchArr = new bool[4];
     private static Dictionary<string, int> BodyComponents =
@@ -27,6 +27,18 @@ public class SiFu_PoseManager : MonoBehaviour
         { "RightFoot", 3 }
     };
 
+    // for UI
+    public int poseVal = 100; // points a static pose values 
+    public int comboVal = 200; // points a moving pose values
+    public int weaponVal = 300; // points a pose with weapon values
+    public int score; // level of matery!
+    private int numPose; // the number of each pose type being hit
+    private int numCombo;
+    private int numWeapon;
+    private int currPoseType; // 0-pose, 1-combo, 2-weapon
+    private int gameState; // 0-ongoing, 1-win, 2-loss
+
+    // body size calibration
     float defaultHeight = 1.7f;
     float playerHeight;
 
@@ -111,11 +123,11 @@ public class SiFu_PoseManager : MonoBehaviour
         if (currPose == null) return;
 
         bool fullBodyMatch = true;
-        int id = 0;
+        //int id = 0;
         foreach (bool v in componentMatchArr)
         {
-            Debug.Log("i: " + id + " = " + v);
-            id++;
+            //Debug.Log("i: " + id + " = " + v);
+            //id++;
             fullBodyMatch = fullBodyMatch && v;
         }
 
@@ -126,6 +138,23 @@ public class SiFu_PoseManager : MonoBehaviour
             for(int i = 0; i < componentMatchArr.Length; i++)
             {
                 componentMatchArr[i] = false;
+            }
+
+            // add score
+            if (currPose.tag == "StaticPose")
+            {
+                numPose++;
+                score += poseVal;
+            }
+            else if (currPose.tag == "ComboPose")
+            {
+                numCombo++;
+                score += comboVal;
+            }
+            else if (currPose.tag == "WeaponPose")
+            {
+                numWeapon++;
+                score += weaponVal;
             }
         }
     }

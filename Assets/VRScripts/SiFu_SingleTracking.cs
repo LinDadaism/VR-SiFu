@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// alias
+using SiFu_Trigger = Valve.VR.InteractionSystem.SiFu_Trigger;
+
 public class SiFu_SingleTracking : MonoBehaviour
 {
     private Transform   grandParentPose;
@@ -61,9 +64,7 @@ public class SiFu_SingleTracking : MonoBehaviour
             if (!isMovingPose && !hasWeapon)
             {
                 //Debug.Log("hit!");
-
-                // send signal to pose manager
-                pm.setComponentMatch(gameObject.name, true);
+                OnComponentMatch(other.transform.gameObject.GetComponent<SiFu_Trigger>());
             }
             if (isMovingPose)
             {
@@ -106,10 +107,9 @@ public class SiFu_SingleTracking : MonoBehaviour
 
                 if (timeElapsed > clipLength)
                 {
-                    Debug.Log("clip length: " + clipLength);
-                    Debug.Log("component: " + gameObject.name);
-                    // send signal to global manager
-                    pm.setComponentMatch(gameObject.name, true);
+                    //Debug.Log("clip length: " + clipLength);
+                    //Debug.Log("component: " + gameObject.name);
+                    OnComponentMatch(other.transform.gameObject.GetComponent<SiFu_Trigger>());
                 }
 
             }
@@ -130,9 +130,7 @@ public class SiFu_SingleTracking : MonoBehaviour
                 currZ < initWeaponRotZ + rotOffset)
             {
                 mat.SetColor("_EmissionColor", Color.green);
-
-                // send signal to global manager
-                pm.setComponentMatch(gameObject.name, true);
+                OnComponentMatch(other.transform.gameObject.GetComponent<SiFu_Trigger>());
             }
             // position matched but not rotation
             else
@@ -155,5 +153,12 @@ public class SiFu_SingleTracking : MonoBehaviour
             // send signal to pose manager
             pm.setComponentMatch(gameObject.name, false);
         }
+    }
+
+    void OnComponentMatch(SiFu_Trigger trigger)
+    {
+        int duration = 500000;
+        if (trigger) trigger.TriggerHapticPulse((ushort)duration);
+        pm.setComponentMatch(gameObject.name, true);
     }
 }

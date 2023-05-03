@@ -111,7 +111,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   visualCue: {fileID: 0}
-  percentMatch: 0.8
+  rotOffset: 20
 --- !u!1 &133357800656181512
 GameObject:
   m_ObjectHideFlags: 0
@@ -223,7 +223,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   visualCue: {fileID: 0}
-  percentMatch: 0.8
+  rotOffset: 20
 --- !u!1 &133357800827505532
 GameObject:
   m_ObjectHideFlags: 0
@@ -236,7 +236,7 @@ GameObject:
   - component: {fileID: 5076437957311247509}
   m_Layer: 0
   m_Name: Pose3
-  m_TagString: Untagged
+  m_TagString: StaticPose
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -249,7 +249,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 133357800827505532}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 8, y: 1.2, z: -0}
+  m_LocalPosition: {x: 8, y: 1.35, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -381,7 +381,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   visualCue: {fileID: 0}
-  percentMatch: 0.8
+  rotOffset: 20
 --- !u!1 &133357800939995776
 GameObject:
   m_ObjectHideFlags: 0
@@ -747,7 +747,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   visualCue: {fileID: 0}
-  percentMatch: 0.8
+  rotOffset: 20
 --- !u!1 &133357801866274361
 GameObject:
   m_ObjectHideFlags: 0
