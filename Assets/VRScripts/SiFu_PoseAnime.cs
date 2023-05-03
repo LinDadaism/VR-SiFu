@@ -11,6 +11,9 @@ public class SiFu_PoseAnime : MonoBehaviour
     // Movement speed in units per second.
     public float speed = 1.0f;
 
+    // if waitTime has passed, clear and reduce player's health
+    public float waitTime = 8.0f;
+
     // Time when the movement started.
     protected float startTime;
 
@@ -48,6 +51,10 @@ public class SiFu_PoseAnime : MonoBehaviour
         transform.position = Vector3.Lerp(startMarker, endMarker, fractionOfJourney);
 
         //PauseAnim();
+        if(Time.time - startTime > waitTime)
+        {
+            SiFu_PoseManager.instance.HitPlayer();
+        }
     }
 
     // stop animation after reaching arena

@@ -5,9 +5,12 @@ using UnityEngine;
 public class SiFu_PickUpWeapon : MonoBehaviour
 {
     public Valve.VR.InteractionSystem.SiFu_Trigger trigger;
+    public GameObject handWeapon;
 
     bool inBox = false;
     bool holding = false;
+
+    public int weaponType = 1;
 
     SpriteRenderer rend;
 
@@ -55,17 +58,21 @@ public class SiFu_PickUpWeapon : MonoBehaviour
     void PickUp()
     {
         holding = true;
-
-        Debug.Log("Try To PickUp");
-        // TODO
+        
         rend.enabled = false;
 
+        Debug.Log("Try To PickUp");
+        handWeapon.SetActive(true);
+        SiFu_PoseManager.instance.holdingWeaponType = weaponType;
     }
 
     void Release()
     {
         holding = false;
-        Debug.Log("Try To PickUp");
+        Debug.Log("Try To Release");
+
         rend.enabled = true;
+        handWeapon.SetActive(false);
+        SiFu_PoseManager.instance.holdingWeaponType = 0;
     }
 }

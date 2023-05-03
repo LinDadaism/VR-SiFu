@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4798805080952047813
 Transform:
   m_ObjectHideFlags: 0
@@ -25,8 +25,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3145387437619476096}
   m_LocalRotation: {x: -0, y: -0, z: 0.17364818, w: 0.9848078}
-  m_LocalPosition: {x: -0.01071351, y: 0.28571424, z: -0.035735544}
-  m_LocalScale: {x: 1.4285715, y: 1.4285716, z: 1.428572}
+  m_LocalPosition: {x: -0.010713849, y: 0.28571418, z: -0.035746437}
+  m_LocalScale: {x: 1.4285715, y: 1.4285713, z: 1.4285715}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 6068956358240917322}
@@ -468,6 +468,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   visualCue: {fileID: 6068956358649415857}
   rotOffset: 20
+  weaponType: 1
 --- !u!1 &6068956358649415858
 GameObject:
   m_ObjectHideFlags: 0
@@ -881,6 +882,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   visualCue: {fileID: 0}
   rotOffset: 20
+  weaponType: 0
 --- !u!1 &6068956359228742453
 GameObject:
   m_ObjectHideFlags: 0
@@ -993,6 +995,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   visualCue: {fileID: 0}
   rotOffset: 20
+  weaponType: 0
 --- !u!1 &6068956359517524973
 GameObject:
   m_ObjectHideFlags: 0
@@ -1105,6 +1108,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   visualCue: {fileID: 6068956357597966178}
   rotOffset: 20
+  weaponType: 0
 --- !u!1 &6194355089580214675
 GameObject:
   m_ObjectHideFlags: 0

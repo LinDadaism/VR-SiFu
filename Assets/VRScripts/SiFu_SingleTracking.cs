@@ -15,13 +15,14 @@ public class SiFu_SingleTracking : MonoBehaviour
 
     private bool        isMovingPose;
     private float       percentMatch = 0.3f; // posing time period required to count as a match
-    private float       startTime; // for detecting a constant collision over x amound of seconds
+    private float       enterStartTime; // for detecting a constant collision over x amound of seconds
 
     private bool        hasWeapon;
     private Transform   weapon;
     private Transform   weaponVisualCue;
     private float       initWeaponRotZ;
     public  float       rotOffset = 20.0f; // in degrees
+    public  int         weaponType = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -50,7 +51,8 @@ public class SiFu_SingleTracking : MonoBehaviour
             visualCue = grandParentPose.GetChild(0).Find(gameObject.name);
         }
         mat = visualCue.gameObject.GetComponent<Renderer>().material;
-        pm = GameObject.Find("GlobalManager").GetComponent<SiFu_PoseManager>();
+        // pm = GameObject.Find("GlobalManager").GetComponent<SiFu_PoseManager>();
+        pm = SiFu_PoseManager.instance;
     }
 
     void OnTriggerEnter(Collider other)
@@ -64,7 +66,7 @@ public class SiFu_SingleTracking : MonoBehaviour
             if (!isMovingPose && !hasWeapon)
             {
                 //Debug.Log("hit!");
-                OnComponentMatch(other.transform.gameObject.GetComponent<SiFu_Trigger>());
+                OnComponentMatch();
             }
             if (isMovingPose)
             {
@@ -92,10 +94,15 @@ public class SiFu_SingleTracking : MonoBehaviour
     // mark pose matched + change color of the visual cue on target. 
     void OnTriggerStay(Collider other)
     {
+        // haptic feedback
+        int duration = 500000;
+        SiFu_Trigger trigger = other.transform.gameObject.GetComponent<SiFu_Trigger>();
+        if (trigger) trigger.TriggerHapticPulse((ushort)duration);
+
         // moving pose match logic
         if (other.CompareTag("GameController") && isMovingPose)
         {
-            float timeElapsed = Time.time - startTime;
+            float timeElapsed = Time.time - enterStartTime;
 
             // get current body part animation's length
             Animator anim = transform.parent.gameObject.GetComponent<Animator>(); // animator is attached on a parent obj
@@ -109,14 +116,14 @@ public class SiFu_SingleTracking : MonoBehaviour
                 {
                     //Debug.Log("clip length: " + clipLength);
                     //Debug.Log("component: " + gameObject.name);
-                    OnComponentMatch(other.transform.gameObject.GetComponent<SiFu_Trigger>());
+                    OnComponentMatch();
                 }
 
             }
         }
 
         // weapon pose match logic
-        if (hasWeapon)
+        if (hasWeapon && weaponType == SiFu_PoseManager.instance.holdingWeaponType)
         {
             // sync weapon rotation with controller's
             weapon.localRotation = Quaternion.Euler(0, 0, other.transform.rotation.eulerAngles.z);
@@ -130,7 +137,7 @@ public class SiFu_SingleTracking : MonoBehaviour
                 currZ < initWeaponRotZ + rotOffset)
             {
                 mat.SetColor("_EmissionColor", Color.green);
-                OnComponentMatch(other.transform.gameObject.GetComponent<SiFu_Trigger>());
+                OnComponentMatch();
             }
             // position matched but not rotation
             else
@@ -145,20 +152,16 @@ public class SiFu_SingleTracking : MonoBehaviour
         if (other.CompareTag("GameController"))
         {
             //Debug.Log("miss!");
+            OnComponentMatch(false);
 
             // change color of visual cues
             mat.EnableKeyword("_EMISSION");
             mat.SetColor("_EmissionColor", Color.red);
-
-            // send signal to pose manager
-            pm.setComponentMatch(gameObject.name, false);
         }
     }
 
-    void OnComponentMatch(SiFu_Trigger trigger)
+    void OnComponentMatch(bool isMatch = true)
     {
-        int duration = 500000;
-        if (trigger) trigger.TriggerHapticPulse((ushort)duration);
-        pm.setComponentMatch(gameObject.name, true);
+        if (pm) pm.setComponentMatch(gameObject.name, isMatch);
     }
 }

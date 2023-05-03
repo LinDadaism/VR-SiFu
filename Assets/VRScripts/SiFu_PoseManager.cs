@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class SiFu_PoseManager : MonoBehaviour
 {
+    public static SiFu_PoseManager instance;
+
     public float timer;
     public float spawnPeriod; // how frequently a pose is spawned e.g. every 5 seconds
     public int numberSpawnedEachPeriod;
@@ -26,17 +28,28 @@ public class SiFu_PoseManager : MonoBehaviour
         { "LeftFoot", 2 },
         { "RightFoot", 3 }
     };
+    private static Dictionary<string, int> BodyComponentsSound =
+    new Dictionary<string, int>()
+    {
+        { "LeftHand", 1 },
+        { "RightHand", 1 },
+        { "LeftFoot", 0 },
+        { "RightFoot", 2 }
+    };
 
     // for UI
     public int poseVal = 100; // points a static pose values 
     public int comboVal = 200; // points a moving pose values
     public int weaponVal = 300; // points a pose with weapon values
-    public int score; // level of matery!
+    private int score; // level of matery!
     private int numPose; // the number of each pose type being hit
     private int numCombo;
     private int numWeapon;
     private int currPoseType; // 0-pose, 1-combo, 2-weapon
     private int gameState; // 0-ongoing, 1-win, 2-loss
+
+    [HideInInspector]
+    public int health = 140;
 
     // body size calibration
     float defaultHeight = 1.7f;
@@ -48,9 +61,12 @@ public class SiFu_PoseManager : MonoBehaviour
 
     public GameObject beginPose;
 
+    public int holdingWeaponType = 0;
+
     // Start is called before the first frame update
     void Start()
     {
+        instance = this;
         spawnPeriod = 8.0f;
         numberSpawnedEachPeriod = 1;
 
@@ -64,22 +80,6 @@ public class SiFu_PoseManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (gameRunning) {
-            if (trigger.CheckGrabStarting())
-            {
-                Debug.Log("Grab!!!!!!!!!!!!!!!!!!");
-
-                // TODO: initialize the game
-                // gameRunning = true;
-                // beginPose.SetActive(true);
-            }
-            else
-            {
-                //Debug.Log("No Grab");
-            }
-            //return; // for debugging
-        }
-
         // spawn poses
         //timer += Time.deltaTime;
         if (currPose == null && gameRunning /*timer > spawnPeriod*/)
@@ -118,17 +118,20 @@ public class SiFu_PoseManager : MonoBehaviour
         currPose = GameObject.Find(poseName);
     }
 
-    void ClearPose()
+    void ClearPose(bool force = false)
     {
         if (currPose == null) return;
 
         bool fullBodyMatch = true;
         //int id = 0;
-        foreach (bool v in componentMatchArr)
+        if (!force)
         {
-            //Debug.Log("i: " + id + " = " + v);
-            //id++;
-            fullBodyMatch = fullBodyMatch && v;
+            foreach (bool v in componentMatchArr)
+            {
+                //Debug.Log("i: " + id + " = " + v);
+                //id++;
+                fullBodyMatch = fullBodyMatch && v;
+            }
         }
 
         if (fullBodyMatch)
@@ -144,18 +147,37 @@ public class SiFu_PoseManager : MonoBehaviour
             if (currPose.tag == "StaticPose")
             {
                 numPose++;
-                score += poseVal;
+                if (!force)
+                    score += poseVal;
+                
             }
             else if (currPose.tag == "ComboPose")
             {
                 numCombo++;
-                score += comboVal;
+                if (!force)
+                    score += comboVal;
             }
             else if (currPose.tag == "WeaponPose")
             {
                 numWeapon++;
-                score += weaponVal;
+                if (!force)
+                    score += weaponVal;
             }
         }
+    }
+
+    public void HitPlayer()
+    {
+        health -= 20;
+        if(health <= 0)
+        {
+            Die();
+        }
+        ClearPose(true);
+    }
+
+    public void Die()
+    {
+        gameRunning = false;
     }
 }
