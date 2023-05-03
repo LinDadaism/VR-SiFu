@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8347388124752744734}
   - component: {fileID: 1264820905856551716}
   - component: {fileID: 3385637619345693101}
+  - component: {fileID: 4372831112414924035}
   m_Layer: 0
   m_Name: MovableLeftHand
   m_TagString: Untagged
@@ -107,6 +108,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4372831112414924035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 247744158372906645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd464e62082f9a44ca6d6b17e21b183c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tracking: {fileID: 0}
 --- !u!1 &3145387437619476096
 GameObject:
   m_ObjectHideFlags: 0
@@ -118,6 +132,7 @@ GameObject:
   - component: {fileID: 4798805080952047813}
   - component: {fileID: 2562152234467717089}
   - component: {fileID: 2182595826472897788}
+  - component: {fileID: 6806456537383095398}
   m_Layer: 0
   m_Name: MovableRightHand
   m_TagString: Untagged
@@ -214,6 +229,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6806456537383095398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3145387437619476096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd464e62082f9a44ca6d6b17e21b183c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tracking: {fileID: 6068956359517524960}
 --- !u!1 &6068956357597966179
 GameObject:
   m_ObjectHideFlags: 0
@@ -398,10 +426,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f7e686c72f1eb44988276386efc6e0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startMarker: {x: 8, y: 1.2, z: 0}
-  endMarker: {x: 3.4, y: 1.2, z: 0}
-  speed: 1
-  animations: []
 --- !u!1 &6068956358022718468
 GameObject:
   m_ObjectHideFlags: 0
@@ -597,6 +621,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   visualCue: {fileID: 6068956358649415857}
   rotOffset: 20
+  weaponType: 0
 --- !u!1 &6068956358649415858
 GameObject:
   m_ObjectHideFlags: 0
@@ -897,6 +922,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab92fb533e9baf149a963a4b5b970b52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startMarker: {x: 0, y: 0, z: 0}
+  endMarker: {x: 0, y: 0, z: -5}
+  speed: 1
+  waitTime: 8
+  animations: []
+  cueTransform: {fileID: 0}
 --- !u!1 &6068956359133766825
 GameObject:
   m_ObjectHideFlags: 0
@@ -1009,6 +1040,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   visualCue: {fileID: 0}
   rotOffset: 20
+  weaponType: 0
 --- !u!1 &6068956359228742453
 GameObject:
   m_ObjectHideFlags: 0
@@ -1121,6 +1153,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   visualCue: {fileID: 0}
   rotOffset: 20
+  weaponType: 0
 --- !u!1 &6068956359517524973
 GameObject:
   m_ObjectHideFlags: 0
@@ -1233,6 +1266,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   visualCue: {fileID: 6068956357597966178}
   rotOffset: 20
+  weaponType: 0
 --- !u!1 &6194355089580214675
 GameObject:
   m_ObjectHideFlags: 0
@@ -1244,6 +1278,7 @@ GameObject:
   - component: {fileID: 3735546694464485200}
   - component: {fileID: 6867809758318900154}
   - component: {fileID: 4081132215851969821}
+  - component: {fileID: 8048134652531571752}
   m_Layer: 0
   m_Name: MovableRightHand
   m_TagString: Untagged
@@ -1340,6 +1375,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &8048134652531571752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6194355089580214675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd464e62082f9a44ca6d6b17e21b183c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tracking: {fileID: 0}
 --- !u!1 &8210731107202714878
 GameObject:
   m_ObjectHideFlags: 0
@@ -1351,6 +1399,7 @@ GameObject:
   - component: {fileID: 6354963377100777078}
   - component: {fileID: 7432507218968981838}
   - component: {fileID: 3236393506286435882}
+  - component: {fileID: 6050206915145364451}
   m_Layer: 0
   m_Name: MovableLeftHand
   m_TagString: Untagged
@@ -1447,3 +1496,16 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6050206915145364451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8210731107202714878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd464e62082f9a44ca6d6b17e21b183c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tracking: {fileID: 6068956358240917326}

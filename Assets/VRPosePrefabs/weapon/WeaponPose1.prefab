@@ -268,10 +268,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f7e686c72f1eb44988276386efc6e0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startMarker: {x: 8, y: 1.2, z: 0}
-  endMarker: {x: 3.4, y: 1.2, z: 0}
-  speed: 1
-  animations: []
 --- !u!1 &6068956358022718468
 GameObject:
   m_ObjectHideFlags: 0
@@ -770,6 +766,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab92fb533e9baf149a963a4b5b970b52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startMarker: {x: 0, y: 0, z: 0}
+  endMarker: {x: 0, y: 0, z: -5}
+  speed: 1
+  waitTime: 8
+  animations: []
+  cueTransform: {fileID: 6068956358649415857}
 --- !u!1 &6068956359133766825
 GameObject:
   m_ObjectHideFlags: 0

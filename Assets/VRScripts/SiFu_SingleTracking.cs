@@ -12,10 +12,13 @@ public class SiFu_SingleTracking : MonoBehaviour
     private Transform   visualCue;
     private Material    mat;
     SiFu_PoseManager    pm;
+    Animator            anim;
 
     private bool        isMovingPose;
-    private float       percentMatch = 0.3f; // posing time period required to count as a match
-    private float       enterStartTime; // for detecting a constant collision over x amound of seconds
+    private float       percentMatch = 0.7f; // posing time period required to count as a match
+    private float       triggerStartTime; // for detecting a constant collision over x amound of seconds
+    private float       triggerLastTime;
+    private float       triggerAccumulateTime;
 
     private bool        hasWeapon;
     private Transform   weapon;
@@ -23,6 +26,7 @@ public class SiFu_SingleTracking : MonoBehaviour
     private float       initWeaponRotZ;
     public  float       rotOffset = 20.0f; // in degrees
     public  int         weaponType = 0;
+    private float       clipMatchTime;
 
     // Start is called before the first frame update
     void Start()
@@ -35,7 +39,10 @@ public class SiFu_SingleTracking : MonoBehaviour
         else
         {
             grandParentPose = transform.parent.parent.parent;
-
+            anim = transform.parent.gameObject.GetComponent<Animator>(); // animator is attached on a parent obj
+            float clipLength = anim.GetCurrentAnimatorClipInfo(0)[0].clip.length;
+            float animSpeed = anim.GetFloat("speed");
+            clipMatchTime = (clipLength / animSpeed) * percentMatch; // the time period a player needs to stay matching
         }
 
         hasWeapon = transform.childCount > 0 ? transform.GetChild(0).gameObject.name == "Weapon" : false;
@@ -53,6 +60,8 @@ public class SiFu_SingleTracking : MonoBehaviour
         mat = visualCue.gameObject.GetComponent<Renderer>().material;
         // pm = GameObject.Find("GlobalManager").GetComponent<SiFu_PoseManager>();
         pm = SiFu_PoseManager.instance;
+
+        
     }
 
     void OnTriggerEnter(Collider other)
@@ -70,7 +79,7 @@ public class SiFu_SingleTracking : MonoBehaviour
             }
             if (isMovingPose)
             {
-                startTime = Time.time;
+                triggerStartTime = Time.time;
             }
             if (hasWeapon)
             {
@@ -102,23 +111,20 @@ public class SiFu_SingleTracking : MonoBehaviour
         // moving pose match logic
         if (other.CompareTag("GameController") && isMovingPose)
         {
-            float timeElapsed = Time.time - enterStartTime;
+
+            // float timeElapsed = Time.time - triggerStartTime;
+            triggerAccumulateTime += Time.time - triggerLastTime;
+            triggerLastTime = Time.time;
 
             // get current body part animation's length
-            Animator anim = transform.parent.gameObject.GetComponent<Animator>(); // animator is attached on a parent obj
             if (anim != null)
             {
-                float clipLength = anim.GetCurrentAnimatorClipInfo(0)[0].clip.length;
-                float animSpeed = anim.GetFloat("speed");
-                clipLength = (clipLength / animSpeed) * percentMatch; // the time period a player needs to stay matching
-
-                if (timeElapsed > clipLength)
+                if (triggerAccumulateTime > clipMatchTime)
                 {
                     //Debug.Log("clip length: " + clipLength);
                     //Debug.Log("component: " + gameObject.name);
                     OnComponentMatch();
                 }
-
             }
         }
 
@@ -163,5 +169,10 @@ public class SiFu_SingleTracking : MonoBehaviour
     void OnComponentMatch(bool isMatch = true)
     {
         if (pm) pm.setComponentMatch(gameObject.name, isMatch);
+    }
+
+    public void OnEachLoopBegin()
+    {
+        triggerAccumulateTime = 0.0f;
     }
 }

@@ -48,7 +48,6 @@ public class SiFu_PoseManager : MonoBehaviour
     private int currPoseType; // 0-pose, 1-combo, 2-weapon
     private int gameState; // 0-ongoing, 1-win, 2-loss
 
-    [HideInInspector]
     public int health = 140;
 
     // body size calibration
@@ -136,20 +135,13 @@ public class SiFu_PoseManager : MonoBehaviour
 
         if (fullBodyMatch)
         {
-            currPose.GetComponent<SiFu_Pose>().Die();
-            currPose = null;
-            for(int i = 0; i < componentMatchArr.Length; i++)
-            {
-                componentMatchArr[i] = false;
-            }
-
             // add score
             if (currPose.tag == "StaticPose")
             {
                 numPose++;
                 if (!force)
                     score += poseVal;
-                
+
             }
             else if (currPose.tag == "ComboPose")
             {
@@ -163,11 +155,19 @@ public class SiFu_PoseManager : MonoBehaviour
                 if (!force)
                     score += weaponVal;
             }
+
+            currPose.GetComponent<SiFu_Pose>().Die();
+            currPose = null;
+            for(int i = 0; i < componentMatchArr.Length; i++)
+            {
+                componentMatchArr[i] = false;
+            }
         }
     }
 
     public void HitPlayer()
     {
+        Debug.Log("Hit The Player");
         health -= 20;
         if(health <= 0)
         {
