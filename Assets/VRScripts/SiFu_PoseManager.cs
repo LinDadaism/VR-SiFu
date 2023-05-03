@@ -28,26 +28,26 @@ public class SiFu_PoseManager : MonoBehaviour
         { "LeftFoot", 2 },
         { "RightFoot", 3 }
     };
-    private static Dictionary<string, int> BodyComponentsSound =
-    new Dictionary<string, int>()
+    private static Dictionary<string, string> BodyComponentSoundClips =
+    new Dictionary<string, string>()
     {
-        { "LeftHand", 1 },
-        { "RightHand", 1 },
-        { "LeftFoot", 0 },
-        { "RightFoot", 2 }
+        { "LeftHand", "hoo" },
+        { "RightHand", "ha" },
+        { "LeftFoot", "hee" },
+        { "RightFoot", "hey" }
     };
 
     // for UI
-    public int poseVal = 100; // points a static pose values 
-    public int comboVal = 200; // points a moving pose values
-    public int weaponVal = 300; // points a pose with weapon values
-    private int score; // level of matery!
-    private int numPose; // the number of each pose type being hit
+    public  int poseVal = 100;      // points a static pose values 
+    public  int comboVal = 200;     // points a moving pose values
+    public  int weaponVal = 300;    // points a pose with weapon values
+    [HideInInspector]
+    public  int score;              // level of matery!
+    private int numPose;            // the number of each pose type being hit
     private int numCombo;
     private int numWeapon;
-    private int currPoseType; // 0-pose, 1-combo, 2-weapon
-    private int gameState; // 0-ongoing, 1-win, 2-loss
-
+    private int currPoseType;       // 0-pose, 1-combo, 2-weapon
+    private int gameState;          // 0-ongoing, 1-win, 2-loss
     [HideInInspector]
     public int health = 140;
 
@@ -110,6 +110,17 @@ public class SiFu_PoseManager : MonoBehaviour
     {
 
         componentMatchArr[BodyComponents[name]] = isMatch;
+        
+        // play sound effect
+        AudioSource[] sounds = GetComponents<AudioSource>();
+        foreach (AudioSource sound in sounds)
+        {
+            if (sound.clip.name == BodyComponentSoundClips[name]) 
+            {
+                sound.Play();
+            }
+        }
+        
         ClearPose();
     }
 
