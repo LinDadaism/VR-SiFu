@@ -52,7 +52,7 @@ public class SiFu_PoseManager : MonoBehaviour
     private int gameState;          // 0-ongoing, 1-win, 2-loss
 
     // body size calibration
-    float defaultHeight = 1.7f;
+    float defaultHeight = 1.574f;
     float playerHeight;
 
     public bool gameRunning = false;
@@ -74,6 +74,10 @@ public class SiFu_PoseManager : MonoBehaviour
     public GameObject healthCanvas;
     public SiFu_Time  poseTimer;
 
+    public GameObject gong;
+
+    public GameObject cameraObj;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -92,22 +96,19 @@ public class SiFu_PoseManager : MonoBehaviour
     void Update()
     {
         /* switched to striking a gong to start */
-        //if (waitForGameStart)
-        //{
-            //if(trigger.CheckGrabStarting())
-            //{
-            //    gameRunning = true;
-            //    waitForGameStart = false;
-            //    beginHintText.SetActive(false);
-            //    scoreCanvas.SetActive(true);
-            //    healthCanvas.SetActive(true);
-            //    Debug.Log("Grab Start");
-            //}
-            //else
-            //{
-            //    return;
-            //}
-        //}
+        if (waitForGameStart)
+        {
+            if (trigger.CheckGrabStarting())
+            {
+                gong.SetActive(true);
+                playerHeight = cameraObj.transform.position.y;
+                Debug.Log("playerHeight: " + playerHeight.ToString());
+            }
+            else
+            {
+                return;
+            }
+        }
 
         // spawn poses
         //timer += Time.deltaTime;
@@ -125,7 +126,7 @@ public class SiFu_PoseManager : MonoBehaviour
                 SiFu_Pose poseComp = currPose.GetComponent<SiFu_Pose>();
                 if (poseComp != null)
                 {
-                    poseComp.SetScale(1f);
+                    poseComp.SetScale(playerHeight / defaultHeight);
                     // start timer animation
                     if (poseTimer) poseTimer.BurnIncense(poseComp.waitTime);
                 }
@@ -152,12 +153,15 @@ public class SiFu_PoseManager : MonoBehaviour
         componentMatchArr[BodyComponents[name]] = isMatch;
         
         // play sound effect
-        AudioSource[] sounds = GetComponents<AudioSource>();
-        foreach (AudioSource sound in sounds)
+        if (isMatch)
         {
-            if (sound.clip.name == BodyComponentSoundClips[name]) 
+            AudioSource[] sounds = GetComponents<AudioSource>();
+            foreach (AudioSource sound in sounds)
             {
-                sound.Play();
+                if (sound.clip.name == BodyComponentSoundClips[name])
+                {
+                    sound.Play();
+                }
             }
         }
         

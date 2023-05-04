@@ -53,15 +53,16 @@ public class SiFu_SingleTracking : MonoBehaviour
             weaponVisualCue = grandParentPose.GetChild(0).Find(gameObject.name).GetChild(0);
         }
 
+        // below can only find the first layer of children visual cue;
+        // if combo/weapon, need to manually assign visual cue in prefab
         if (visualCue == null)
         {
             visualCue = grandParentPose.GetChild(0).Find(gameObject.name);
         }
         mat = visualCue.gameObject.GetComponent<Renderer>().material;
-        // pm = GameObject.Find("GlobalManager").GetComponent<SiFu_PoseManager>();
         pm = SiFu_PoseManager.instance;
 
-        
+        triggerStartTime = Time.time;
     }
 
     void OnTriggerEnter(Collider other)
@@ -79,7 +80,8 @@ public class SiFu_SingleTracking : MonoBehaviour
             }
             if (isMovingPose)
             {
-                triggerStartTime = Time.time;
+                // triggerStartTime = Time.time;
+                triggerLastTime = Time.time;
             }
             if (hasWeapon)
             {
@@ -121,6 +123,7 @@ public class SiFu_SingleTracking : MonoBehaviour
             {
                 if (triggerAccumulateTime > clipMatchTime)
                 {
+                    // Debug.Log("movingPose passed with ratio " + (triggerAccumulateTime / clipMatchTime).ToString());
                     //Debug.Log("clip length: " + clipLength);
                     //Debug.Log("component: " + gameObject.name);
                     OnComponentMatch();
@@ -173,6 +176,12 @@ public class SiFu_SingleTracking : MonoBehaviour
 
     public void OnEachLoopBegin()
     {
+        
+        Debug.Log("clipMatchTime : " + clipMatchTime.ToString());
+        Debug.Log("actual duraction : " + (Time.time - triggerStartTime).ToString());
+        Debug.Log("triggerAccumulateTime : " + triggerAccumulateTime.ToString());
+        
+        triggerStartTime = Time.time;
         triggerAccumulateTime = 0.0f;
     }
 }

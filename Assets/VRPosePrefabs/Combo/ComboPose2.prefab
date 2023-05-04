@@ -120,7 +120,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd464e62082f9a44ca6d6b17e21b183c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tracking: {fileID: 0}
+  tracking: {fileID: 4808946825808986007}
 --- !u!1 &6068956357597966179
 GameObject:
   m_ObjectHideFlags: 0
@@ -551,6 +551,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6068956358940590268}
   - component: {fileID: 6068956358940590259}
+  - component: {fileID: 5277357946686554686}
   m_Layer: 0
   m_Name: Panda2DTarget
   m_TagString: Untagged
@@ -629,6 +630,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &5277357946686554686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6068956358940590269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca6fa29a741eeed4b93930f23dcf4903, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  VRCamera: {fileID: 0}
+  playerAreaRadius: 2
 --- !u!1 &6068956359130810689
 GameObject:
   m_ObjectHideFlags: 0
@@ -809,6 +824,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4798805080952047813}
     m_Modifications:
+    - target: {fileID: 392743741074747796, guid: 6ffea72ab82596f469e620bef08a1b2d,
+        type: 3}
+      propertyPath: visualCue
+      value: 
+      objectReference: {fileID: 6068956357597966178}
     - target: {fileID: 392743741074747800, guid: 6ffea72ab82596f469e620bef08a1b2d,
         type: 3}
       propertyPath: m_RootOrder
@@ -886,6 +906,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6ffea72ab82596f469e620bef08a1b2d, type: 3}
+--- !u!114 &4808946825808986007 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 392743741074747796, guid: 6ffea72ab82596f469e620bef08a1b2d,
+    type: 3}
+  m_PrefabInstance: {fileID: 5174497376585551363}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 926e4512ddf96e44cbf7e3735bf0e2f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &4808946825808986011 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 392743741074747800, guid: 6ffea72ab82596f469e620bef08a1b2d,

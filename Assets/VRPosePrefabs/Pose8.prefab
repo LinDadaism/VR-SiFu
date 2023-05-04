@@ -264,6 +264,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5155477008832687451}
   - component: {fileID: 5155477008832687444}
+  - component: {fileID: 7618924329616946481}
   m_Layer: 0
   m_Name: Panda2DTarget
   m_TagString: Untagged
@@ -342,6 +343,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &7618924329616946481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5155477008832687450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca6fa29a741eeed4b93930f23dcf4903, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  VRCamera: {fileID: 0}
+  playerAreaRadius: 2
 --- !u!1 &5155477009007076693
 GameObject:
   m_ObjectHideFlags: 0

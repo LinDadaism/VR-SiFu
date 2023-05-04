@@ -33,6 +33,22 @@ public class SiFu_Pose : MonoBehaviour
         float fractionOfJourney = distCovered / journeyLength;
         return fractionOfJourney;
     }
+    
+    void Awake()
+    {
+        if (gameObject.tag == "StaticPose")
+        {
+            waitTime = 10.0f;
+        }
+        if (gameObject.tag == "ComboPose")
+        {
+            waitTime = 25.0f;
+        }
+        if (gameObject.tag == "WeaponPose")
+        {
+            waitTime = 20.0f;
+        }
+    }
 
     void Start()
     {
@@ -49,6 +65,7 @@ public class SiFu_Pose : MonoBehaviour
         {
             // TODO: Set PickUp Weapon Prefab 
         }
+        Debug.Log("wait time: " + waitTime);
     }
 
     // Move to the target end position.
@@ -81,6 +98,7 @@ public class SiFu_Pose : MonoBehaviour
     public void SetScale(float ratio)
     {
         // TODO: adjust the scale accoridng to player's height
+
     }
 
     public void Die()

@@ -5,12 +5,17 @@ using UnityEngine;
 public class SiFu_SpriteTranslation : MonoBehaviour
 {
     public Camera VRCamera;
-    public float playerAreaRadius = 1.0f;
+    public float playerAreaRadius = 2.0f;
     Vector3 initPos;
 
     void Start()
     {
         initPos = transform.position;
+        if (!VRCamera)
+        {
+            VRCamera = Camera.main;
+            Debug.Log(VRCamera.name);
+        }
     }
 
     // change from Update to LateUpdate so the camera is always updated first
