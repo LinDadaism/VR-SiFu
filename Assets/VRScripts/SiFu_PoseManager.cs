@@ -13,8 +13,7 @@ public class SiFu_PoseManager : MonoBehaviour
     private int idx = 0;
     public Camera VRCamera;
 
-    [SerializeField]
-    GameObject currPose;
+    public GameObject currPose;
     Vector3 originInScreenCoords;
     float spawnDistX = 8.0f;
     float spawnDistY = 1.35f;
@@ -38,18 +37,19 @@ public class SiFu_PoseManager : MonoBehaviour
     };
 
     // for UI
-    public  int poseVal = 100;      // points a static pose values 
-    public  int comboVal = 200;     // points a moving pose values
-    public  int weaponVal = 300;    // points a pose with weapon values
     [HideInInspector]
-    public  int score;              // level of matery!
+    public int score;              // level of matery!
+    [HideInInspector]
+    public int health = 140;
+
+    private int poseVal = 100;      // points a static pose values 
+    private int comboVal = 200;     // points a moving pose values
+    private int weaponVal = 300;    // points a pose with weapon values
     private int numPose;            // the number of each pose type being hit
     private int numCombo;
     private int numWeapon;
     private int currPoseType;       // 0-pose, 1-combo, 2-weapon
     private int gameState;          // 0-ongoing, 1-win, 2-loss
-    [HideInInspector]
-    public int health = 140;
 
     // body size calibration
     float defaultHeight = 1.7f;
@@ -62,6 +62,17 @@ public class SiFu_PoseManager : MonoBehaviour
     public GameObject beginPose;
 
     public int holdingWeaponType = 0;
+
+    // Transforms to act as start and end markers for the translation.
+    public Vector3 cueStartMarker = new Vector3(8.0f, 1.35f, 0.0f);
+    public Vector3 cueEndMarker = new Vector3(2.6f, 1.35f, 0.0f);
+
+    bool waitForGameStart = true;
+
+    public GameObject beginHintText;
+    public GameObject scoreCanvas;
+    public GameObject healthCanvas;
+    public SiFu_Time  poseTimer;
 
     // Start is called before the first frame update
     void Start()
@@ -80,6 +91,24 @@ public class SiFu_PoseManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /* switched to striking a gong to start */
+        //if (waitForGameStart)
+        //{
+            //if(trigger.CheckGrabStarting())
+            //{
+            //    gameRunning = true;
+            //    waitForGameStart = false;
+            //    beginHintText.SetActive(false);
+            //    scoreCanvas.SetActive(true);
+            //    healthCanvas.SetActive(true);
+            //    Debug.Log("Grab Start");
+            //}
+            //else
+            //{
+            //    return;
+            //}
+        //}
+
         // spawn poses
         //timer += Time.deltaTime;
         if (currPose == null && gameRunning /*timer > spawnPeriod*/)
@@ -91,12 +120,14 @@ public class SiFu_PoseManager : MonoBehaviour
                 currPose = Instantiate(posesToSpawn[idx++ % posesToSpawn.Count], // currently looping thru the pose list
                     new Vector3(spawnDistX, spawnDistY, 0f),
                     Quaternion.AngleAxis(90.0f, Vector3.up));
-                
+
                 //Debug.Log("0-currPose: " + (currPose == null).ToString());
                 SiFu_Pose poseComp = currPose.GetComponent<SiFu_Pose>();
                 if (poseComp != null)
                 {
                     poseComp.SetScale(1f);
+                    // start timer animation
+                    if (poseTimer) poseTimer.BurnIncense(poseComp.waitTime);
                 }
                 else
                 {
@@ -104,6 +135,15 @@ public class SiFu_PoseManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void StartGame()
+    {
+        gameRunning = true;
+        waitForGameStart = false;
+        beginHintText.SetActive(false);
+        scoreCanvas.SetActive(true);
+        healthCanvas.SetActive(true);
     }
 
     public void setComponentMatch(string name, bool isMatch)
@@ -190,6 +230,7 @@ public class SiFu_PoseManager : MonoBehaviour
 
     public void Die()
     {
+        Debug.Log("Die");
         gameRunning = false;
     }
 }

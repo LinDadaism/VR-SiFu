@@ -4,14 +4,10 @@ using UnityEngine;
 
 public class SiFu_Pose : MonoBehaviour
 {
-    // Transforms to act as start and end markers for the translation.
-    public Vector3 startMarker;
-    public Vector3 endMarker;
-
     // Movement speed in units per second.
     public float speed = 1.0f;
 
-    // if waitTime has passed, clear and reduce player's health
+    // if waitTime has passed, missed a pose and reduce player's health
     public float waitTime = 8.0f;
 
     // Time when the movement started.
@@ -24,6 +20,9 @@ public class SiFu_Pose : MonoBehaviour
     public List<Animator> animations = new List<Animator>();
 
     public Transform cueTransform;
+
+    Vector3 startMarker;
+    Vector3 endMarker;
 
     protected float CalcLerpRatio(float speed)
     {
@@ -40,8 +39,16 @@ public class SiFu_Pose : MonoBehaviour
         // Keep a note of the time the movement started.
         startTime = Time.time;
 
+        startMarker = SiFu_PoseManager.instance.cueStartMarker;
+        endMarker = SiFu_PoseManager.instance.cueEndMarker;
+
         // Calculate the journey length.
         journeyLength = Vector3.Distance(startMarker, endMarker);
+
+        if(gameObject.tag == "WeaponPose")
+        {
+            // TODO: Set PickUp Weapon Prefab 
+        }
     }
 
     // Move to the target end position.
