@@ -78,10 +78,23 @@ public class SiFu_PoseManager : MonoBehaviour
 
     public GameObject cameraObj;
 
+    public GameObject weaponsObj;
+
+    public List<SiFu_PickUpWeapon> weapons;
+
+    GameObject targetWeaponObj;
+
+    [HideInInspector]
+    public int targetWeaponType;
+
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         instance = this;
+    }
+
+    void Start()
+    {   
         spawnPeriod = 8.0f;
         numberSpawnedEachPeriod = 1;
 
@@ -129,6 +142,15 @@ public class SiFu_PoseManager : MonoBehaviour
                     poseComp.SetScale(playerHeight / defaultHeight);
                     // start timer animation
                     if (poseTimer) poseTimer.BurnIncense(poseComp.waitTime);
+
+                    if(poseComp.tag == "WeaponPose")
+                    {
+                        Debug.Log("active weapons");
+                        weaponsObj.SetActive(true);
+                    }
+                    else {
+                        Debug.Log("not active weapons");
+                    }
                 }
                 else
                 {
@@ -218,6 +240,40 @@ public class SiFu_PoseManager : MonoBehaviour
             {
                 componentMatchArr[i] = false;
             }
+            
+            if (holdingWeaponType != 0)
+            {
+                holdingWeaponType = 0;
+                foreach (SiFu_PickUpWeapon w in weapons)
+                {
+                    if (w.weaponType == holdingWeaponType)
+                    {
+                        w.Release();
+                    }
+                }
+            }
+            weaponsObj.SetActive(false);
+        }
+    }
+
+    public void LookForWeapon(int type, GameObject weaponObj)
+    {
+        targetWeaponType = type;
+        targetWeaponObj = weaponObj;
+    }
+
+    public void SetWeapon(int newWeaponType)
+    {
+        Debug.Log("SetWeapon " + newWeaponType.ToString());
+        holdingWeaponType = newWeaponType;
+        if(holdingWeaponType == targetWeaponType && targetWeaponObj != null)
+        {
+            Debug.Log("Show targetWeaponObj");
+            targetWeaponObj.SetActive(true);
+        }
+        else
+        {
+            targetWeaponObj.SetActive(false);
         }
     }
 

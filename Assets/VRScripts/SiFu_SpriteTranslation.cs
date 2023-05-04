@@ -8,7 +8,7 @@ public class SiFu_SpriteTranslation : MonoBehaviour
     public float playerAreaRadius = 2.0f;
     Vector3 initPos;
 
-    void Start()
+    public void init()
     {
         initPos = transform.position;
         if (!VRCamera)

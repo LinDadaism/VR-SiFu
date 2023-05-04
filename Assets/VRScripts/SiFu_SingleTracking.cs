@@ -21,8 +21,9 @@ public class SiFu_SingleTracking : MonoBehaviour
     private float       triggerAccumulateTime;
 
     private bool        hasWeapon;
-    private Transform   weapon;
-    private Transform   weaponVisualCue;
+    public Transform   weapon;
+    // public float weaponRotBasis = 0.0f; // represent the z-axis rotation
+    public  Transform   weaponVisualCue;
     private float       initWeaponRotZ;
     public  float       rotOffset = 20.0f; // in degrees
     public  int         weaponType = 0;
@@ -50,7 +51,8 @@ public class SiFu_SingleTracking : MonoBehaviour
         {
             weapon = transform.GetChild(0);
             initWeaponRotZ = weapon.rotation.eulerAngles.z;
-            weaponVisualCue = grandParentPose.GetChild(0).Find(gameObject.name).GetChild(0);
+            // weaponVisualCue = grandParentPose.GetChild(0).Find(gameObject.name).GetChild(0);
+            SiFu_PoseManager.instance.LookForWeapon(weaponType, weapon.gameObject);
         }
 
         // below can only find the first layer of children visual cue;
@@ -134,11 +136,13 @@ public class SiFu_SingleTracking : MonoBehaviour
         // weapon pose match logic
         if (hasWeapon && weaponType == SiFu_PoseManager.instance.holdingWeaponType)
         {
+            Debug.Log("weapon right, check rotation");
             // sync weapon rotation with controller's
             weapon.localRotation = Quaternion.Euler(0, 0, other.transform.rotation.eulerAngles.z);
             weaponVisualCue.localRotation = weapon.localRotation;
-            
+
             float currZ = weapon.localRotation.eulerAngles.z;
+            // float currZ = other.transform.rotation.eulerAngles.z;
             currZ = ConvertAngleDeg(currZ);
             
             // both position and rotation match

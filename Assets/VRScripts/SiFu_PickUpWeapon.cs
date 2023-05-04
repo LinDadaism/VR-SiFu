@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class SiFu_PickUpWeapon : MonoBehaviour
 {
-    public Valve.VR.InteractionSystem.SiFu_Trigger trigger;
-    public GameObject handWeapon;
+    Valve.VR.InteractionSystem.SiFu_Trigger trigger;
+   
+    // public GameObject handWeapon;
 
     bool inBox = false;
     bool holding = false;
@@ -17,6 +18,7 @@ public class SiFu_PickUpWeapon : MonoBehaviour
     void Start()
     {
         rend = GetComponent<SpriteRenderer>();
+        trigger = Valve.VR.InteractionSystem.SiFu_Trigger.instance;
     }
 
     // Update is called once per frame
@@ -24,7 +26,8 @@ public class SiFu_PickUpWeapon : MonoBehaviour
     {
         if(trigger.CheckGrabStarting())
         {
-            if(inBox && !holding)
+            Debug.Log("Trigger in PickUp");
+            if(inBox && !holding && SiFu_PoseManager.instance.targetWeaponType == weaponType)
             {
                 PickUp();
             }
@@ -50,7 +53,7 @@ public class SiFu_PickUpWeapon : MonoBehaviour
         if (other.collider.CompareTag("GameController"))
         {
             inBox = false;
-            rend.color = Color.grey;
+            rend.color = new Color(171f/256f, 171f / 256f, 171f / 256f, 230f / 256f);
             Debug.Log("Player far weapon");
         }
     }
@@ -62,17 +65,17 @@ public class SiFu_PickUpWeapon : MonoBehaviour
         rend.enabled = false;
 
         Debug.Log("Try To PickUp");
-        handWeapon.SetActive(true);
-        SiFu_PoseManager.instance.holdingWeaponType = weaponType;
+        // handWeapon.SetActive(true);
+        SiFu_PoseManager.instance.SetWeapon(weaponType);
     }
 
-    void Release()
+    public void Release()
     {
         holding = false;
         Debug.Log("Try To Release");
 
         rend.enabled = true;
-        handWeapon.SetActive(false);
-        SiFu_PoseManager.instance.holdingWeaponType = 0;
+        // handWeapon.SetActive(false);
+        SiFu_PoseManager.instance.SetWeapon(0);
     }
 }

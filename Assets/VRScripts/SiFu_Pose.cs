@@ -46,7 +46,7 @@ public class SiFu_Pose : MonoBehaviour
         }
         if (gameObject.tag == "WeaponPose")
         {
-            waitTime = 20.0f;
+            waitTime = 20000.0f;
         }
     }
 
@@ -97,8 +97,40 @@ public class SiFu_Pose : MonoBehaviour
 
     public void SetScale(float ratio)
     {
-        // TODO: adjust the scale accoridng to player's height
+        // adjust the scale accoridng to player's height
+        Transform target = transform.Find("Panda2DTarget");
+        if(target == null) {
+            Debug.LogError("Can't find Panda2DTarget");
+            return;
+        }
+        List<Transform> foots = new();
+        List<Transform> hands = new();
+        for(int i = 0; i < 4; i++)
+        {
+            Transform targetChild = target.GetChild(i);
+            if(targetChild.gameObject.name.Contains("Foot"))
+            {
+                foots.Add(targetChild);
+            }
+            else
+            {
+                hands.Add(targetChild);
+            }
+        }
 
+        // TODO
+        //transform.position = transform.position.y 
+
+
+        SiFu_SpriteTranslation tranComp = target.GetComponent<SiFu_SpriteTranslation>();
+        if(tranComp == null)
+        {
+            Debug.LogError("Can't find SiFu_SpriteTranslation on Panda2DTarget");
+        }
+        else
+        {
+            tranComp.init();
+        }
     }
 
     public void Die()

@@ -6,6 +6,8 @@ namespace Valve.VR.InteractionSystem
 {
     public class SiFu_Trigger : MonoBehaviour
     {
+        public static SiFu_Trigger instance;
+
         public SteamVR_Input_Sources handType;
 
         public SteamVR_Action_Boolean grabPinchAction = SteamVR_Input.GetAction<SteamVR_Action_Boolean>("GrabPinch");
@@ -15,6 +17,11 @@ namespace Valve.VR.InteractionSystem
         public SteamVR_Action_Vibration hapticAction = SteamVR_Input.GetAction<SteamVR_Action_Vibration>("Haptic");
 
         public SteamVR_Action_Boolean uiInteractAction = SteamVR_Input.GetAction<SteamVR_Action_Boolean>("InteractUI");
+
+        void Awake()
+        {
+            instance = this;
+        }
 
         public bool CheckGrabStarting()
         {
