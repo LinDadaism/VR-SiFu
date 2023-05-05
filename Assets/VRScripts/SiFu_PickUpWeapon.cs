@@ -9,7 +9,7 @@ public class SiFu_PickUpWeapon : MonoBehaviour
     // public GameObject handWeapon;
 
     bool inBox = false;
-    bool holding = false;
+    public bool holding = false;
 
     public int weaponType = 1;
 
@@ -76,6 +76,6 @@ public class SiFu_PickUpWeapon : MonoBehaviour
 
         rend.enabled = true;
         // handWeapon.SetActive(false);
-        SiFu_PoseManager.instance.SetWeapon(0);
+        // SiFu_PoseManager.instance.SetWeapon(0);
     }
 }

@@ -53,6 +53,7 @@ public class SiFu_SingleTracking : MonoBehaviour
             initWeaponRotZ = weapon.rotation.eulerAngles.z;
             // weaponVisualCue = grandParentPose.GetChild(0).Find(gameObject.name).GetChild(0);
             SiFu_PoseManager.instance.LookForWeapon(weaponType, weapon.gameObject);
+            // weapon.rotation = Quaternion.Euler(0, 0, initWeaponRotZ + 90);
         }
 
         // below can only find the first layer of children visual cue;
@@ -95,10 +96,10 @@ public class SiFu_SingleTracking : MonoBehaviour
     // cap angle in between 0-360 degrees
     float ConvertAngleDeg(float angle)
     {
-        while (!(0.0f < angle && angle < 360.0f))
+        while (!(-180.0f < angle && angle < 180.0f))
         {
-            if (angle > 360.0f) angle -= 360.0f;
-            if (angle < 0.0f) angle += 360.0f;
+            if (angle > 180.0f) angle -= 360.0f;
+            if (angle < -180.0f) angle += 360.0f;
         }
         return angle;
     }
@@ -138,7 +139,7 @@ public class SiFu_SingleTracking : MonoBehaviour
         {
             Debug.Log("weapon right, check rotation");
             // sync weapon rotation with controller's
-            weapon.localRotation = Quaternion.Euler(0, 0, other.transform.rotation.eulerAngles.z);
+            weapon.localRotation = Quaternion.Euler(0, 0, ConvertAngleDeg(other.transform.rotation.eulerAngles.z + 90));
             weaponVisualCue.localRotation = weapon.localRotation;
 
             float currZ = weapon.localRotation.eulerAngles.z;

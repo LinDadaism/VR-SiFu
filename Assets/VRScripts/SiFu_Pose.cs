@@ -24,6 +24,8 @@ public class SiFu_Pose : MonoBehaviour
     Vector3 startMarker;
     Vector3 endMarker;
 
+    bool poseEnd = false;
+
     protected float CalcLerpRatio(float speed)
     {
         // Distance moved equals elapsed time times speed..
@@ -38,15 +40,15 @@ public class SiFu_Pose : MonoBehaviour
     {
         if (gameObject.tag == "StaticPose")
         {
-            waitTime = 10.0f;
+            waitTime = 3.0f;
         }
         if (gameObject.tag == "ComboPose")
         {
-            waitTime = 25.0f;
+            waitTime = 5.0f;
         }
         if (gameObject.tag == "WeaponPose")
         {
-            waitTime = 20000.0f;
+            waitTime = 1.0f;
         }
     }
 
@@ -61,10 +63,6 @@ public class SiFu_Pose : MonoBehaviour
         // Calculate the journey length.
         journeyLength = Vector3.Distance(startMarker, endMarker);
 
-        if(gameObject.tag == "WeaponPose")
-        {
-            // TODO: Set PickUp Weapon Prefab 
-        }
         Debug.Log("wait time: " + waitTime);
     }
 
@@ -77,8 +75,9 @@ public class SiFu_Pose : MonoBehaviour
         cueTransform.position = Vector3.Lerp(startMarker, endMarker, fractionOfJourney);
 
         //PauseAnim();
-        if (Time.time - startTime > waitTime)
+        if (Time.time - startTime > waitTime && !poseEnd)
         {
+            poseEnd = true;
             SiFu_PoseManager.instance.HitPlayer();
         }
     }
@@ -119,7 +118,29 @@ public class SiFu_Pose : MonoBehaviour
         }
 
         // TODO
-        //transform.position = transform.position.y 
+        //transform.position = transform.position.y
+        if(foots.Count != 0)
+        {
+            float footY = 0.0f;
+            foreach (Transform foot in foots)
+            {
+                foot.position = new Vector3(
+                    (foot.position.x - transform.position.x) * ratio + transform.position.x,
+                    foot.position.y,
+                    foot.position.z
+                    );
+                footY += foot.position.y;
+            }
+            footY /= foots.Count;
+            foreach (Transform hand in hands)
+            {
+                hand.position = new Vector3(
+                    (hand.position.x - transform.position.x) * ratio + transform.position.x,
+                    (hand.position.y - footY) * ratio + footY,
+                    hand.position.z
+                    );
+            }
+        }
 
 
         SiFu_SpriteTranslation tranComp = target.GetComponent<SiFu_SpriteTranslation>();

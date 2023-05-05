@@ -17,7 +17,7 @@ public class SiFu_PoseManager : MonoBehaviour
     public List<GameObject> posesLevel2     = new List<GameObject>();
     public List<GameObject> posesLevel3     = new List<GameObject>();
     public List<GameObject> posesToSpawn    = new List<GameObject>();
-    private static List<List<GameObject>> poses;
+    private static List<List<GameObject>> poses = new List<List<GameObject>>();
 
     private int idx = 0;
     public Camera VRCamera;
@@ -42,7 +42,7 @@ public class SiFu_PoseManager : MonoBehaviour
         { "RightHand", "ha" },
         { "LeftFoot", "hee" },
         { "RightFoot", "hey" },
-        { "Background", "impersonatingSifu" }
+        { "Background", "impersonatingSifu" },
         { "Level1", "kaiTheme" },
         { "Level2", "skilledInTheArts" },
         { "Level3", "skilledInTheArts" },
@@ -54,7 +54,9 @@ public class SiFu_PoseManager : MonoBehaviour
     [HideInInspector]
     public int score;              // level of matery!
     [HideInInspector]
-    public int health = 140;
+    public int maxhealth = 140;
+    [HideInInspector]
+    public int health;
 
     private int poseVal = 100;      // points a static pose values 
     private int comboVal = 200;     // points a moving pose values
@@ -75,8 +77,6 @@ public class SiFu_PoseManager : MonoBehaviour
 
     public GameObject beginPose;
 
-    public int holdingWeaponType = 0;
-
     // Transforms to act as start and end markers for the translation.
     public Vector3 cueStartMarker = new Vector3(8.0f, 1.35f, 0.0f);
     public Vector3 cueEndMarker = new Vector3(2.6f, 1.35f, 0.0f);
@@ -86,9 +86,11 @@ public class SiFu_PoseManager : MonoBehaviour
     public GameObject beginHintText;
     public GameObject scoreCanvas;
     public GameObject healthCanvas;
+    public GameObject lossCanvas;
+    public GameObject winCanvas;
     public SiFu_Time  poseTimer;
 
-    public GameObject gong;
+    public List<GameObject> levels;
 
     public GameObject cameraObj;
 
@@ -98,31 +100,34 @@ public class SiFu_PoseManager : MonoBehaviour
 
     GameObject targetWeaponObj;
 
+    public int holdingWeaponType = 0;
     [HideInInspector]
     public int targetWeaponType;
 
-    // Start is called before the first frame update
     void Awake()
     {
         instance = this;
     }
 
     void Start()
-    {   
+    {
+        health = maxhealth;
         spawnPeriod = 8.0f;
         numberSpawnedEachPeriod = 1;
-        poses = { posesToSpawn, posesLevel1, posesLevel2, posesLevel3 };
+        poses.Add(posesToSpawn);
+        poses.Add(posesLevel1);
+        poses.Add(posesLevel2);
+        poses.Add(posesLevel3);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        /* switched to striking a gong to start */
+        // striking a gong to start
         if (waitForGameStart)
         {
             if (trigger.CheckGrabStarting())
             {
-                gong.SetActive(true);
+                SetLevelGongs();
                 playerHeight = cameraObj.transform.position.y;
                 Debug.Log("playerHeight: " + playerHeight.ToString());
             }
@@ -140,7 +145,7 @@ public class SiFu_PoseManager : MonoBehaviour
             for (int i = 0; i < numberSpawnedEachPeriod; i++)
             {
                 //int idx = Random.Range(0, posesToSpawn.Count);
-                currPose = Instantiate(poses[currLevel][idx++ % poses[currLevel].Count], // currently looping thru the pose list
+                currPose = Instantiate((poses[currLevel])[idx++ % (poses[currLevel]).Count], // currently looping thru the pose list
                     new Vector3(spawnDistX, spawnDistY, 0f),
                     Quaternion.AngleAxis(90.0f, Vector3.up));
                 numSpawned++;
@@ -170,20 +175,25 @@ public class SiFu_PoseManager : MonoBehaviour
         }
 
         // win condition
-        if (numPose + numCombo + numWeapon == numSpawned)
+        if (numSpawned > 0 && numPose + numCombo + numWeapon == poses[currLevel].Count)
         {
             Win();
         }
     }
 
-    public void StartGame()
+    public void StartGame(int level)
     {
+        health = maxhealth;
+        currLevel = level;
         gameRunning = true;
         waitForGameStart = false;
         beginHintText.SetActive(false);
         scoreCanvas.SetActive(true);
         healthCanvas.SetActive(true);
-        Time.timeScale = 1;
+        lossCanvas.SetActive(false);
+        winCanvas.SetActive(false);
+        SetLevelGongs(false);
+        //Time.timeScale = 1;
     }
 
     public void setComponentMatch(string name, bool isMatch)
@@ -194,14 +204,7 @@ public class SiFu_PoseManager : MonoBehaviour
         // play sound effect
         if (isMatch)
         {
-            AudioSource[] sounds = GetComponents<AudioSource>();
-            foreach (AudioSource sound in sounds)
-            {
-                if (sound.clip.name == SoundClips[name])
-                {
-                    sound.Play();
-                }
-            }
+            PlayAudio(SoundClips[name]);
         }
         
         ClearPose();
@@ -216,13 +219,6 @@ public class SiFu_PoseManager : MonoBehaviour
     {
         if (currPose == null) return;
 
-        currPose.GetComponent<SiFu_Pose>().Die();
-        currPose = null;
-        for (int i = 0; i < componentMatchArr.Length; i++)
-        {
-            componentMatchArr[i] = false;
-        }
-
         bool fullBodyMatch = true;
         //int id = 0;
         if (!force)
@@ -233,10 +229,13 @@ public class SiFu_PoseManager : MonoBehaviour
                 //id++;
                 fullBodyMatch = fullBodyMatch && v;
             }
+        }
 
-            if (fullBodyMatch)
+        if (fullBodyMatch)
+        {
+            // add score
+            if (!force)
             {
-                // add score
                 if (currPose.tag == "StaticPose")
                 {
                     numPose++;
@@ -254,19 +253,29 @@ public class SiFu_PoseManager : MonoBehaviour
                     score += weaponVal;
                 }
             }
-            
+
+            currPose.GetComponent<SiFu_Pose>().Die();
+            currPose = null;
+            for (int i = 0; i < componentMatchArr.Length; i++)
+            {
+                componentMatchArr[i] = false;
+            }
+
+
             if (holdingWeaponType != 0)
             {
                 holdingWeaponType = 0;
                 foreach (SiFu_PickUpWeapon w in weapons)
                 {
-                    if (w.weaponType == holdingWeaponType)
+                    if (w.holding)
                     {
                         w.Release();
                     }
                 }
             }
             weaponsObj.SetActive(false);
+            targetWeaponType = 0;
+            targetWeaponObj = null;
         }
     }
 
@@ -280,7 +289,12 @@ public class SiFu_PoseManager : MonoBehaviour
     {
         Debug.Log("SetWeapon " + newWeaponType.ToString());
         holdingWeaponType = newWeaponType;
-        if(holdingWeaponType == targetWeaponType && targetWeaponObj != null)
+        if(newWeaponType == 0)
+        {
+            targetWeaponObj.SetActive(false);
+            targetWeaponObj = null;
+        }
+        else if(holdingWeaponType == targetWeaponType && targetWeaponObj != null)
         {
             Debug.Log("Show targetWeaponObj");
             targetWeaponObj.SetActive(true);
@@ -288,6 +302,26 @@ public class SiFu_PoseManager : MonoBehaviour
         else
         {
             targetWeaponObj.SetActive(false);
+        }
+    }
+
+    void SetLevelGongs(bool enabled = true)
+    {
+        foreach (GameObject level in levels)
+        {
+            level.SetActive(enabled);
+        }
+    }
+
+    void PlayAudio(string clip)
+    {
+        AudioSource[] sounds = GetComponents<AudioSource>();
+        foreach (AudioSource sound in sounds)
+        {
+            if (sound.clip.name == clip)
+            {
+                sound.Play();
+            }
         }
     }
 
@@ -306,18 +340,24 @@ public class SiFu_PoseManager : MonoBehaviour
     void Lose()
     {
         Debug.Log("You lose!");
+        ClearPose(true);
         gameRunning = false;
-        currPose = null;
-        Time.timeScale = 0;
-        SoundClips["Loss"].play();
+        lossCanvas.SetActive(true);
+        PlayAudio(SoundClips["Loss"]);
+        SetLevelGongs();
+
+        // Time.timeScale = 0;
     }
 
     void Win()
     {
+        ClearPose(true);
         Debug.Log("You win!");
         gameRunning = false;
-        currPose = null;
-        Time.timeScale = 0;
-        SoundClips["Win"].play();
+        winCanvas.SetActive(true);
+        PlayAudio(SoundClips["Win"]);
+        SetLevelGongs();
+
+        // Time.timeScale = 0;
     }
 }
