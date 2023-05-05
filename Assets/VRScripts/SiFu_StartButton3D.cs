@@ -13,12 +13,19 @@ public class SiFu_StartButton3D : MonoBehaviour
         Debug.Log("Hit Start Button");
         if (other.collider.CompareTag("GameController") && !SiFu_PoseManager.instance.gameRunning)
         {
-            Debug.Log("Controller Hit Start Button");
-            SiFu_PoseManager.instance.StartGame(level);
+            // UI and sound effects
+            AudioSource source = GetComponent<AudioSource>();
+            source.Play();
+            system.Play(true);
 
-            // ui and sound effects
-            GetComponent<AudioSource>().Play();
-            system.Play(/*includeChildren*/true);
+            Debug.Log("Controller Hit Start Button");
+            StartCoroutine(StartGameLater());
         }
+    }
+
+    IEnumerator StartGameLater()
+    {
+        yield return new WaitForSeconds(2.0f);
+        SiFu_PoseManager.instance.StartGame(level);
     }
 }

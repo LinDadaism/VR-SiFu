@@ -40,15 +40,18 @@ public class SiFu_Pose : MonoBehaviour
     {
         if (gameObject.tag == "StaticPose")
         {
-            waitTime = 3.0f;
+            //waitTime = 3.0f;
+            waitTime = SiFu_PoseManager.instance.waitTimes[0];
         }
         if (gameObject.tag == "ComboPose")
         {
-            waitTime = 5.0f;
+            //waitTime = 5.0f;
+            waitTime = SiFu_PoseManager.instance.waitTimes[1];
         }
         if (gameObject.tag == "WeaponPose")
         {
-            waitTime = 1.0f;
+            //waitTime = 1.0f;
+            waitTime = SiFu_PoseManager.instance.waitTimes[2];
         }
     }
 
@@ -96,12 +99,15 @@ public class SiFu_Pose : MonoBehaviour
 
     public void SetScale(float ratio)
     {
+        
         // adjust the scale accoridng to player's height
         Transform target = transform.Find("Panda2DTarget");
         if(target == null) {
             Debug.LogError("Can't find Panda2DTarget");
             return;
         }
+
+        
         List<Transform> foots = new();
         List<Transform> hands = new();
         for(int i = 0; i < 4; i++)
@@ -117,6 +123,7 @@ public class SiFu_Pose : MonoBehaviour
             }
         }
 
+        
         // TODO
         //transform.position = transform.position.y
         if(foots.Count != 0)
@@ -124,23 +131,24 @@ public class SiFu_Pose : MonoBehaviour
             float footY = 0.0f;
             foreach (Transform foot in foots)
             {
-                foot.position = new Vector3(
-                    (foot.position.x - transform.position.x) * ratio + transform.position.x,
-                    foot.position.y,
-                    foot.position.z
+                foot.localPosition = new Vector3(
+                    foot.localPosition.x * ratio,
+                    foot.localPosition.y,
+                    foot.localPosition.z
                     );
-                footY += foot.position.y;
+                footY += foot.localPosition.y;
             }
             footY /= foots.Count;
             foreach (Transform hand in hands)
             {
-                hand.position = new Vector3(
-                    (hand.position.x - transform.position.x) * ratio + transform.position.x,
-                    (hand.position.y - footY) * ratio + footY,
-                    hand.position.z
+                hand.localPosition = new Vector3(
+                    hand.localPosition.x * ratio,
+                    (hand.localPosition.y - footY) * ratio + footY,
+                    hand.localPosition.z
                     );
             }
         }
+        
 
 
         SiFu_SpriteTranslation tranComp = target.GetComponent<SiFu_SpriteTranslation>();

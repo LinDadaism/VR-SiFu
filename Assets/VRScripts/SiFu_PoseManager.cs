@@ -47,14 +47,15 @@ public class SiFu_PoseManager : MonoBehaviour
         { "Level2", "skilledInTheArts" },
         { "Level3", "skilledInTheArts" },
         { "Loss", "oogwayAscending" },
-        { "Win", "dragonArises" }
+        { "Win", "dragonArises" },
+        { "Gong", "gong"}
     };
 
     // for UI
     [HideInInspector]
     public int score;              // level of matery!
     [HideInInspector]
-    public int maxhealth = 140;
+    public int maxhealth = 100;
     [HideInInspector]
     public int health;
 
@@ -73,7 +74,7 @@ public class SiFu_PoseManager : MonoBehaviour
 
     public bool gameRunning = false;
 
-    public Valve.VR.InteractionSystem.SiFu_Trigger trigger;
+    Valve.VR.InteractionSystem.SiFu_Trigger trigger;
 
     public GameObject beginPose;
 
@@ -89,6 +90,7 @@ public class SiFu_PoseManager : MonoBehaviour
     public GameObject lossCanvas;
     public GameObject winCanvas;
     public SiFu_Time  poseTimer;
+    public ParticleSystem damageVFX;
 
     public List<GameObject> levels;
 
@@ -104,6 +106,10 @@ public class SiFu_PoseManager : MonoBehaviour
     [HideInInspector]
     public int targetWeaponType;
 
+    public List<float> waitTimes;
+
+    public List<GameObject> recoveries;
+
     void Awake()
     {
         instance = this;
@@ -111,6 +117,7 @@ public class SiFu_PoseManager : MonoBehaviour
 
     void Start()
     {
+        trigger = Valve.VR.InteractionSystem.SiFu_Trigger.instance;
         health = maxhealth;
         spawnPeriod = 8.0f;
         numberSpawnedEachPeriod = 1;
@@ -118,6 +125,7 @@ public class SiFu_PoseManager : MonoBehaviour
         poses.Add(posesLevel1);
         poses.Add(posesLevel2);
         poses.Add(posesLevel3);
+        PlayAudio(SoundClips["Background"]);
     }
 
     void Update()
@@ -175,7 +183,7 @@ public class SiFu_PoseManager : MonoBehaviour
         }
 
         // win condition
-        if (numSpawned > 0 && numPose + numCombo + numWeapon == poses[currLevel].Count)
+        if (numSpawned > 0 && numPose + numCombo + numWeapon > poses[currLevel].Count)
         {
             Win();
         }
@@ -183,6 +191,8 @@ public class SiFu_PoseManager : MonoBehaviour
 
     public void StartGame(int level)
     {
+        StopAudio(SoundClips["Loss"]);
+        StopAudio(SoundClips["Win"]);
         health = maxhealth;
         currLevel = level;
         gameRunning = true;
@@ -190,9 +200,26 @@ public class SiFu_PoseManager : MonoBehaviour
         beginHintText.SetActive(false);
         scoreCanvas.SetActive(true);
         healthCanvas.SetActive(true);
+        Debug.Log("start level");
         lossCanvas.SetActive(false);
         winCanvas.SetActive(false);
         SetLevelGongs(false);
+        if (level == 1)
+        {
+            PlayAudio(SoundClips["Level1"]);
+        }
+        else if (level == 2)
+        {
+            PlayAudio(SoundClips["Level2"]);
+        }
+        else 
+        {
+            PlayAudio(SoundClips["Level3"]);
+        }
+        foreach (GameObject r in recoveries) 
+        {
+            r.SetActive(true);
+        }
         //Time.timeScale = 1;
     }
 
@@ -318,9 +345,28 @@ public class SiFu_PoseManager : MonoBehaviour
         AudioSource[] sounds = GetComponents<AudioSource>();
         foreach (AudioSource sound in sounds)
         {
+            if (sound.clip.name != clip)
+            {
+                sound.Stop();
+            }
+        }
+        foreach (AudioSource sound in sounds)
+        {
             if (sound.clip.name == clip)
             {
                 sound.Play();
+            }
+        }
+    }
+
+    void StopAudio(string clip)
+    {
+        AudioSource[] sounds = GetComponents<AudioSource>();
+        foreach (AudioSource sound in sounds)
+        {
+            if (sound.clip.name == clip)
+            {
+                sound.Stop();
             }
         }
     }
@@ -329,7 +375,8 @@ public class SiFu_PoseManager : MonoBehaviour
     {
         Debug.Log("Hit The Player");
         health -= 20;
-        if(health <= 0)
+        damageVFX.Play(true);
+        if (health <= 0)
         {
             Lose();
         }
@@ -346,6 +393,16 @@ public class SiFu_PoseManager : MonoBehaviour
         PlayAudio(SoundClips["Loss"]);
         SetLevelGongs();
 
+        foreach (GameObject r in recoveries)
+        {
+            r.SetActive(false);
+        }
+        numPose = 0;
+        numCombo = 0;
+        numWeapon = 0;
+        numSpawned = 0;
+        idx = 0;
+
         // Time.timeScale = 0;
     }
 
@@ -358,6 +415,16 @@ public class SiFu_PoseManager : MonoBehaviour
         PlayAudio(SoundClips["Win"]);
         SetLevelGongs();
 
+        foreach (GameObject r in recoveries)
+        {
+            r.SetActive(false);
+        }
+
+        numPose = 0;
+        numCombo = 0;
+        numWeapon = 0;
+        numSpawned = 0;
+        idx = 0;
         // Time.timeScale = 0;
     }
 }
